@@ -1,0 +1,1 @@
+export const planeAssetId = 3377243

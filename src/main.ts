@@ -10,10 +10,13 @@ import {
   SampledPositionProperty,
   TimeInterval,
   TimeIntervalCollection,
-  PathGraphics
+  PathGraphics,
+  IonResource,
+  VelocityOrientationProperty
 } from "cesium";
 import "cesium/Build/Cesium/Widgets/widgets.css";
 import rawFlightData from './rawFlightData.json'
+import { planeAssetId } from './assetIds';
 
 const env = await import.meta.env
 
@@ -76,9 +79,27 @@ flightData
 const airplaneEntity = viewer.entities.add({
   availability: new TimeIntervalCollection([ new TimeInterval({ start: start, stop: stop }) ]),
   position: positionProperty,
-  point: { pixelSize: 30, color: Color.GREEN },
+  point: { pixelSize: 30, color: Color.TRANSPARENT },
   path: new PathGraphics({ width: 3 })
 });
 
 // Make the camera track this moving entity.
 viewer.trackedEntity = airplaneEntity;
+
+async function loadModel() {
+  // Load the glTF model from Cesium ion.
+  const airplaneUri = await IonResource.fromAssetId(planeAssetId);
+  const airplaneEntity = viewer.entities.add({
+    availability: new TimeIntervalCollection([ new TimeInterval({ start: start, stop: stop }) ]),
+    position: positionProperty,
+    // Attach the 3D model instead of the green point.
+    model: { uri: airplaneUri },
+    // Automatically compute the orientation from the position.
+    orientation: new VelocityOrientationProperty(positionProperty),    
+    path: new PathGraphics({ width: 3 })
+  });
+  
+  viewer.trackedEntity = airplaneEntity;
+}
+
+loadModel();
