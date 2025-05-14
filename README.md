@@ -32,3 +32,5 @@ https://cesium.com/blog/2024/02/13/configuring-vite-or-webpack-for-cesiumjs/
 
 See
 https://github.com/CesiumGS/cesium-vite-example/tree/main
+
+See screenshots for what you should be able to see on startup
