@@ -19,6 +19,7 @@
   "dependencies": {
     "cesium": "^1.129.0",
     "vite-plugin-commonjs": "^0.10.3",
+    "vite-plugin-static-copy": "^3.0.0",
     "vite-plugin-top-level-await": "^1.5.0"
   }
 }

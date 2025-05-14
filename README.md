@@ -1,4 +1,4 @@
-# 321 Map Widget
+# Cesium Demo Vite
 
 This repository is a base app written using vite + typescript
 
@@ -24,3 +24,11 @@ To run local version:
 npm run dev
 
 Then open http://localhost:5173/ in browser
+
+# Cesium setup with vite
+
+see
+https://cesium.com/blog/2024/02/13/configuring-vite-or-webpack-for-cesiumjs/
+
+See
+https://github.com/CesiumGS/cesium-vite-example/tree/main
