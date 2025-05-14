@@ -20,17 +20,21 @@ import { planeAssetId } from './assetIds';
 
 const env = await import.meta.env
 
-const cesiumAPIKey = env.VITE_CESIUM_API_KEY
-    
-Ion.defaultAccessToken = cesiumAPIKey;
+// Set Cesium Ion access token
+Ion.defaultAccessToken = env.VITE_CESIUM_API_KEY;
+
+// Initialize the viewer with terrain
 // points to #cesiumContainer html element
 const viewer = new Viewer('cesiumContainer', {
   terrain: Terrain.fromWorldTerrain(),
 });
 
+
+// Add OSM 3D buildings
 const osmBuildings = await createOsmBuildingsAsync();
 viewer.scene.primitives.add(osmBuildings);
 
+// set flight data from file
 const flightData = rawFlightData
 
 /* Initialize the viewer clock:
@@ -41,16 +45,21 @@ const flightData = rawFlightData
   Initialize the viewer's clock by setting its start and stop to the flight start and stop times we just calculated. 
   Also, set the viewer's current time to the start time and take the user to that time. 
 */
+
+// Define time-related constants
 const timeStepInSeconds = 30;
 const totalSeconds = timeStepInSeconds * (flightData.length - 1);
 const start = JulianDate.fromIso8601("2020-03-09T23:10:00Z");
 const stop = JulianDate.addSeconds(start, totalSeconds, new JulianDate());
+
+// Configure clock and timeline explicitly
 viewer.clock.startTime = start.clone();
 viewer.clock.stopTime = stop.clone();
 viewer.clock.currentTime = start.clone();
 viewer.timeline.zoomTo(start, stop);
 // Speed up the playback speed 50x.
 viewer.clock.multiplier = 50;
+
 // Start playing the scene.
 viewer.clock.shouldAnimate = true;
 
@@ -73,18 +82,10 @@ flightData
 
 )
   .forEach(entity => {
+    // Create and add entities for each flight data point
     viewer.entities.add(entity)
   });
 
-const airplaneEntity = viewer.entities.add({
-  availability: new TimeIntervalCollection([ new TimeInterval({ start: start, stop: stop }) ]),
-  position: positionProperty,
-  point: { pixelSize: 30, color: Color.TRANSPARENT },
-  path: new PathGraphics({ width: 3 })
-});
-
-// Make the camera track this moving entity.
-viewer.trackedEntity = airplaneEntity;
 
 async function loadModel() {
   // Load the glTF model from Cesium ion.
@@ -93,6 +94,7 @@ async function loadModel() {
     availability: new TimeIntervalCollection([ new TimeInterval({ start: start, stop: stop }) ]),
     position: positionProperty,
     // Attach the 3D model instead of the green point.
+    //  point: { pixelSize: 30, color: Color.GREEN },
     model: { uri: airplaneUri },
     // Automatically compute the orientation from the position.
     orientation: new VelocityOrientationProperty(positionProperty),    
