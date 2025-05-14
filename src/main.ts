@@ -23,7 +23,7 @@ const env = await import.meta.env
 const cesiumAPIKey = env.VITE_CESIUM_API_KEY
     
 Ion.defaultAccessToken = cesiumAPIKey;
-// points to #container html element
+// points to #cesiumContainer html element
 const viewer = new Viewer('cesiumContainer', {
   terrain: Terrain.fromWorldTerrain(),
 });
